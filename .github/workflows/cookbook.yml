@@ -170,6 +170,7 @@ jobs:
       - run: python patterns/otel-observation/agent.py --help
       - run: python -m unittest discover -s patterns/otel-observation/tests -v
   required:
+    name: Cookbook qualification passed
     if: always()
     needs: [select, local, refund-business, native-agent, managed, package, otel]
     runs-on: ubuntu-latest

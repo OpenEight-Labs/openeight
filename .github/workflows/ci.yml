@@ -78,6 +78,7 @@ jobs:
       - run: python -m unittest discover -s scripts -p 'test_*.py' -v
       - run: python scripts/check.py
   required:
+    name: Candidate checks passed
     if: always()
     needs: [select, python, typescript, structural]
     runs-on: ubuntu-latest
