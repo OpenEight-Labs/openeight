@@ -18,7 +18,7 @@ abuse are not.
 ## Reporting concerns
 
 Report harassment or other community concerns privately to
-[support@openeight.ai](mailto:support@openeight.ai). Reports will be reviewed by
+[hello@openeight.ai](mailto:hello@openeight.ai). Reports will be reviewed by
 the project maintainer. Do not post sensitive conduct reports, personal details
 or allegations in public issues.
 For a suspected software vulnerability, follow [SECURITY.md](SECURITY.md).

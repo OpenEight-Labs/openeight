@@ -1,52 +1,27 @@
 # OpenEight
 
-OpenEight helps applications govern agent tool calls and observe their execution.
-This repository contains the Python and TypeScript SDKs, runnable business agents
-and focused integration examples. Use OpenEight to check policy before a tool
-runs, pause sensitive actions for human approval, and record what happened.
-The hosted control plane is maintained separately; its server implementation and
-self-hosting deployment tooling are not included in this repository.
+Apply policies and human approvals to agent tool calls, and record their execution.
+OpenEight checks policy before a governed tool runs, pauses sensitive actions for
+review, and records the decision and execution outcome.
 
-## Start here
+[Website](https://openeight.ai) · [Python SDK](sdk/python/README.md) · [TypeScript SDK](sdk/typescript/README.md) ·
+[Cookbook](cookbook/README.md) · [Documentation](https://openeight.ai/docs) ·
+[Contributing](CONTRIBUTING.md)
 
-| Your goal | Where to start |
-| --- | --- |
-| Try a business agent with local sample data | [Cookbook](cookbook/README.md): Customer Support or Incident Response |
-| Add OpenEight to an existing agent | [Integration walkthrough](cookbook/guides/build-or-integrate.md#run-native-then-add-governance) |
-| Use Python | [Python SDK](sdk/python/README.md) |
-| Use TypeScript | [TypeScript SDK](sdk/typescript/README.md) |
-| Develop or test an SDK | [SDK development](sdk/README.md) and [contributing](CONTRIBUTING.md) |
+## When to use OpenEight
 
-With Python 3.11–3.14, run a credential-free sample from this checkout:
+- Check policy before an agent issues a refund or changes a business record.
+- Require human approval before a sensitive tool call can execute.
+- Trace a tool call's policy decision and execution outcome when investigating a run.
 
-```sh
-cd cookbook
-python cookbook.py list
-python cookbook.py sample customer-support
-```
-
-The sample uses synthetic business data and local operations. It does not call a
-model, contact real business services or exercise OpenEight governance. Follow the
-recipe guide for an integrated run with explicit credentials, provider settings
-and policy readiness.
-
-The default sample prints JSON including these fields (excerpt):
-
-```json
-{
-  "assistant_response": "Your confirmed whole-order refund is complete.",
-  "mode": "local_business_sample",
-  "governance": "not_exercised",
-  "simulated": true,
-  "scenario": "refund"
-}
-```
-
-## See governance in action
+## Add governance to an agent
 
 The [refund walkthrough](cookbook/guides/build-or-integrate.md) starts with a native
 LangChain agent and adds OpenEight while keeping its business tools. The constructor
-change is small; configuration and outcome handling are part of the full example:
+diff below is an integration overview, not a standalone script. Follow the
+[complete example](cookbook/guides/build-or-integrate.md#build-with-openeight)
+for configuration and outcome handling; check [availability](#availability-and-installation)
+before running it:
 
 ```diff
 -from langchain.agents import create_agent
@@ -69,33 +44,68 @@ bound API key. In the walkthrough, a customer requests a simulated 10.50 USD ref
 | Deny | Blocks the refund; creates no refund receipt |
 | Approval required | Pauses for review; pending, rejected or expired approval does not execute the refund |
 
-The local samples and offline fixture tests need no hosted account. Integrated
-governance needs access to an OpenEight deployment with a configured Agent, bound
-API key and active tool policies. For the hosted service, start with the
-[OpenEight setup guide](https://openeight.ai/docs/connect-agent).
-Model-driven examples also need an explicitly selected model and its provider
-credentials. The native example uses a model provider without OpenEight governance.
-See [setup](cookbook/guides/setup.md) to install and configure a cookbook recipe.
+## Try a local business sample
 
-## SDK installation
+You need Git and Python 3.11–3.14. No SDK installation, OpenEight account or
+model-provider credentials are needed for this sample:
 
-The Python SDK is prepared for publication to PyPI; registry acceptance is pending.
-The TypeScript package remains private and is not enabled for npm publication.
-See the [Python installation guide](sdk/python/README.md#installation) and
-[TypeScript installation guide](sdk/typescript/README.md#installation) for details.
-Cookbook setup uses the published Python SDK and requires its release to be available.
-Public assistant skills are maintained independently in
-[OpenEight-Labs/skills](https://github.com/OpenEight-Labs/skills); installation
-acceptance is pending. This repository contains no generated skills mirror.
+```sh
+git clone https://github.com/OpenEight-Labs/openeight.git
+cd openeight/cookbook
+python cookbook.py sample customer-support
+```
 
-## Repository layout
+The sample uses synthetic business data and local operations. It does not call a
+model, contact real business services or exercise OpenEight governance. It lets
+you explore the Customer Support workflow before connecting external services.
 
-- `sdk/python/` and `sdk/typescript/`: independently versioned clients.
-- `sdk/contracts/`: shared public contracts and error mappings.
-- `cookbook/`: business agents, focused patterns, guides and launcher.
-- `scripts/` and `.github/`: repository checks and CI.
+The default sample prints JSON including these fields (excerpt):
+
+```json
+{
+  "governance": "not_exercised",
+  "simulated": true
+}
+```
+
+Explore more scenarios in the [cookbook](cookbook/README.md). To connect a model
+and apply real policy decisions, follow the [setup guidance](#availability-and-installation).
+
+## Availability and installation
+
+| Component | Availability | Next step |
+| --- | --- | --- |
+| Local cookbook samples | Runnable now without credentials or an installed SDK | [Cookbook](cookbook/README.md#start-with-local-data) |
+| Python SDK | Source available; first PyPI release pending | [Installation](sdk/python/README.md#installation) after publication; [development setup](CONTRIBUTING.md#development-and-verification) for source work |
+| TypeScript SDK | Source available; not published to npm | [Build and test from source](sdk/typescript/README.md#qualification) |
+| Governed cookbook examples | Require the published Python SDK, model credentials and OpenEight configuration | [Recipe setup](cookbook/guides/setup.md) after the Python release |
+
+Governed examples need access to an OpenEight deployment, a configured Agent and
+its bound API key, an explicitly selected model, and separate model-provider
+credentials. Register tools and activate their policies before executing governed
+actions. Start with the [OpenEight setup guide](https://openeight.ai/docs/connect-agent),
+then follow the [governed refund setup](cookbook/guides/build-or-integrate.md#build-with-openeight).
+
+## How the pieces fit
+
+- **SDKs** connect your agent to OpenEight for policy decisions and execution
+  telemetry. Python includes managed LangChain and Deep Agents integrations plus
+  a direct client. TypeScript provides direct registration, readiness, decision,
+  approval-state and telemetry APIs; it does not include the managed Python
+  framework integrations. The SDKs are independently versioned.
+- **The hosted control plane** manages policies, human review and execution
+  records. Its server implementation and self-hosting deployment tooling are
+  maintained separately and are not included in this repository.
+- **The cookbook** contains runnable business agents and focused integration
+  examples, including local samples you can explore without credentials.
+
+This repository's SDKs, cookbook, tooling and documentation are open source under
+[Apache-2.0](LICENSE).
+
+## Support and contributions
 
 For questions, bugs and feature proposals, see [support](SUPPORT.md).
+For SDK development and tests, see the [SDK guide](sdk/README.md).
 To contribute, follow [CONTRIBUTING.md](CONTRIBUTING.md) and the
 [code of conduct](CODE_OF_CONDUCT.md). [Maintainers](MAINTAINERS.md) explain how
 decisions and reviews work.
