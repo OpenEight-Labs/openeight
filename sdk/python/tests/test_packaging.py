@@ -108,7 +108,7 @@ def test_distributions_exclude_tests_and_constraints(tmp_path):
         }
         # Fresh installations select the qualified managed tuple; historical
         # registry rows do not expand installation or managed lifecycle support.
-        pins = ("1.4.3", "1.6.7", "1.2.14", "1.1.0", "4.2.0")
+        pins = ("1.4.3", "1.6.7", "1.2.14", "1.1.0", "4.3.0")
         for name, expected in zip(PACKAGES, pins, strict=True):
             assert str(framework_requirements[name].specifier) == "==" + expected
         assert pins in CLOSURES

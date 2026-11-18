@@ -78,8 +78,8 @@ def test_environment_matches_native_candidate():
         "langchain-core": "1.6.7",
         "langgraph": "1.2.14",
         "langgraph-prebuilt": "1.1.0",
-        "langgraph-checkpoint": "4.2.0",
-        "langgraph-checkpoint-sqlite": "3.1.1",
+        "langgraph-checkpoint": "4.3.0",
+        "langgraph-checkpoint-sqlite": "3.1.2",
         "aiosqlite": "0.22.1",
     }
     assert {k: version(k) for k in expected} == expected

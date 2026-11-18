@@ -75,8 +75,11 @@ async def run(directory, phase):
             middleware=[SettlementGap(directory, phase, backend)],
         )
         cfg = {"configurable": {"thread_id": "crash-gap"}}
+        # Persist the preceding step before killing inside the tool node.
         await graph.ainvoke(
-            {"messages": [("user", "go")]} if phase == "kill" else None, cfg
+            {"messages": [("user", "go")]} if phase == "kill" else None,
+            cfg,
+            durability="sync",
         )
         snapshot = await graph.aget_state(cfg)
         files = snapshot.values.get("files", {})

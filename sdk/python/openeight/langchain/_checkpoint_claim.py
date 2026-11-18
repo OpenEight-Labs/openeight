@@ -123,7 +123,7 @@ class ScopedCheckpointAccess(BaseCheckpointSaver):
         postgres = ("langgraph.checkpoint.postgres.aio", "AsyncPostgresSaver")
         if kind == postgres:
             expected = {
-                "langgraph-checkpoint-postgres": "3.1.0",
+                "langgraph-checkpoint-postgres": "3.1.3",
                 "psycopg": "3.3.8",
                 "psycopg-pool": "3.3.3",
             }

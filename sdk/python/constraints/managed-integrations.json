@@ -1,5 +1,5 @@
 {
-  "inventory_date": "2026-11-08",
+  "inventory_date": "2026-11-18",
   "python": [
     "3.11",
     "3.12",
@@ -8,13 +8,16 @@
   ],
   "lanes": [
     {
-      "name": "managed-integrations-v2",
+      "name": "managed-integrations-v3",
       "lock": "qualified.txt",
       "qualification_ids": [
-        "langchain-managed-02",
-        "langchain-durable-02",
-        "deepagents-managed-02",
-        "deepagents-durable-02"
+        "langchain-managed-03",
+        "langchain-durable-03",
+        "deepagents-managed-03",
+        "deepagents-durable-03",
+        "langchain-11",
+        "deepagents-02",
+        "deepagents-local-durable-02"
       ]
     }
   ]
