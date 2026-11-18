@@ -1,0 +1,40 @@
+{
+  "name": "@openeight/sdk",
+  "version": "0.0.1",
+  "license": "Apache-2.0",
+  "private": true,
+  "type": "module",
+  "main": "./dist/index.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "test:node": "node --test --experimental-strip-types test/*.test.ts",
+    "test": "npm run test:node",
+    "typecheck": "tsc --noEmit",
+    "prepack": "npm run typecheck && npm run build",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\""
+  },
+  "devDependencies": {
+    "@types/node": "26.1.1",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3"
+  },
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "NOTICE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/OpenEight-Labs/openeight.git",
+    "directory": "sdk/typescript"
+  }
+}

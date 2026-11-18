@@ -1,0 +1,28 @@
+name: Feature proposal
+description: Discuss a capability or API improvement before implementation.
+title: "[Proposal]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Search existing issues first. Do not include private customer information or credentials.
+        Report suspected vulnerabilities using [SECURITY.md](https://github.com/OpenEight-Labs/openeight/blob/main/SECURITY.md).
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem and use case
+      description: Who needs this and what are they unable to do today?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+      description: Describe the user experience and affected SDK or recipe.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives and compatibility
+      description: Mention existing workarounds and any expected API or migration impact.

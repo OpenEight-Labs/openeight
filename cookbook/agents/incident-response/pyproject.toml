@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openeight-deepagents-incident-example"
+version = "0.1.0"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.11,<3.15"
+dependencies = ["openeight[deepagents]==0.0.1"]
+
+[project.optional-dependencies]
+durable = ["openeight[deepagents-durable]==0.0.1"]
+openai = ["langchain-openai==1.6.7"]
+test = ["pytest>=8,<10", "pytest-asyncio>=1,<2"]
+
+[project.scripts]
+incident-agent = "cli:main"
+
+[tool.setuptools]
+py-modules = ["agent", "cli", "content", "contracts", "destination", "durable_cli", "durable_models", "durable_tools", "models", "profiles", "prompts", "reporting", "runner", "simulator", "tools"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

@@ -1,0 +1,36 @@
+{
+  "release": [
+    {
+      "filename": "deepagents-0.7.23-py3-none-any.whl",
+      "sha256": "ccba4ca32e82f422e08c04b2321d135f1be321fc44ae5891b9b37a7c8bde5ca7"
+    },
+    {
+      "filename": "deepagents-0.7.23.tar.gz",
+      "sha256": "03fbffec1691f72e412eb9251516a799ac3f5d3851defb4a98a49fece5675c10"
+    }
+  ],
+  "tag": {
+    "ref": "refs/tags/deepagents==0.7.23",
+    "node_id": "REF_kwDOPTymlbxyZWZzL3RhZ3MvZGVlcGFnZW50cz09MC43LjIz",
+    "url": "https://api.github.com/repos/langchain-ai/deepagents/git/refs/tags/deepagents==0.7.23",
+    "object": {
+      "sha": "9f4bdf7c8b8bfc86877729d80ed286bd71d78706",
+      "type": "commit",
+      "url": "https://api.github.com/repos/langchain-ai/deepagents/git/commits/9f4bdf7c8b8bfc86877729d80ed286bd71d78706"
+    }
+  },
+  "source_files": {
+    "graph.py": {
+      "sha256": "d4c3f3cf3af6e88c13893404d5f605a8b61316d7ac4ed507e63f975a6bb12199",
+      "matches_tag": true
+    },
+    "middleware/skills.py": {
+      "sha256": "f3cc2139f2b77bd599bf99df032efe27774462b2ecc80f6e58b7ea7edd2d7895",
+      "matches_tag": true
+    },
+    "middleware/subagents.py": {
+      "sha256": "d9ff7f6ea664cf6bcea1517c2afdafc53f9a2b277dd8f5c0d656fde32e0856e9",
+      "matches_tag": true
+    }
+  }
+}

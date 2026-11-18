@@ -1,0 +1,22 @@
+name: Usage question
+description: Ask about using an SDK or cookbook example.
+title: "[Question]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Read [SUPPORT.md](https://github.com/OpenEight-Labs/openeight/blob/main/SUPPORT.md) and search existing issues first.
+        Keep account, billing, credentials and customer data out of public issues.
+        For suspected vulnerabilities, follow [SECURITY.md](https://github.com/OpenEight-Labs/openeight/blob/main/SECURITY.md).
+  - type: textarea
+    id: question
+    attributes:
+      label: What are you trying to do?
+      description: Include the SDK or recipe, versions, what you tried and the relevant documentation.
+    validations:
+      required: true
+  - type: textarea
+    id: example
+    attributes:
+      label: Safe example or output
+      description: Use synthetic data and remove credentials and private content.
