@@ -56,7 +56,7 @@ def test_distributions_exclude_tests_and_constraints(tmp_path):
             "build", "*.egg-info", "__pycache__", ".pytest_cache"
         ),
     )
-    subprocess.run(
+    result = subprocess.run(
         [
             sys.executable,
             "-m",
@@ -66,9 +66,11 @@ def test_distributions_exclude_tests_and_constraints(tmp_path):
             str(tmp_path),
             str(source),
         ],
-        check=True,
+        check=False,
         capture_output=True,
+        text=True,
     )
+    assert result.returncode == 0, result.stdout + result.stderr
     (wheel,) = tmp_path.glob("*.whl")
     with zipfile.ZipFile(wheel) as archive:
         names = archive.namelist()
