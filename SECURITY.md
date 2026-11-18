@@ -9,7 +9,7 @@ OpenEight maintainers own security triage for this repository.
 Do not disclose vulnerabilities, working exploits, credentials or customer data
 in public issues or pull requests. When enabled, use this repository's
 **Security → Report a vulnerability** option for a private report. If unavailable,
-contact sales@openeight.ai only to request a private security reporting channel;
+contact [hello@openeight.ai](mailto:hello@openeight.ai) only to request a private security reporting channel;
 do not include exploit details or secrets in that initial message.
 
 Before public release, maintainers must verify a monitored private reporting

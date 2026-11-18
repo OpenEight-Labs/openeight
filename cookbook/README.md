@@ -107,9 +107,12 @@ python cookbook.py test customer-support -- -q
 python cookbook.py test incident-response -- -q
 ```
 
-CI runs local samples, public API boundary checks, package builds and OTEL tests.
-Every pull request also installs declared public SDK dependencies and runs both
-agents and both runnable tool-pattern suites. Scripted
+CI selects cookbook checks for cookbook, Python SDK and shared repository changes;
+TypeScript-only changes skip this lane. Selected checks run local samples, public
+API boundary checks, package builds, OTEL tests, both agents and both runnable
+tool-pattern suites. Managed integration jobs build the SDK from the checked-out
+source and verify that recipes use that exact candidate wheel. Ordinary cookbook
+setup installs the published SDK declared by each recipe. Scripted
 models and mocked HTTP responses replace external services; the actual SDK and
 native frameworks execute. Missing SDK dependencies fail this lane. These checks
 do not certify live providers or real business services.

@@ -10,7 +10,9 @@ Both initial package versions are 0.0.1.
 | Python | `openeight` | [Python README](python/README.md) |
 | TypeScript | `@openeight/sdk` | [TypeScript README](typescript/README.md) |
 
-For application use, install from PyPI or npm using the package installation guides above.
+Check [package availability](../README.md#availability-and-installation) before
+following the package installation guides above. Source development instructions
+are provided below.
 
 ## Contributing and maintenance
 
@@ -21,16 +23,27 @@ issues, commits, workflow logs or artifacts.
 
 ## Development
 
-Use standard CPython 3.11–3.14 for managed integrations and Node 24 or newer.
+Use Python 3.12 for the current qualification lane and Node 24 for TypeScript.
+Managed integrations support standard CPython 3.11–3.14.
 Python package metadata also permits core use on standard CPython 3.15; this does
 not qualify the newer managed features on that version.
 
+Create and activate a [Python environment](../CONTRIBUTING.md#python-environment)
+first. For Python work, run from `sdk/`:
+
 ```sh
-python -m pip install -e 'python[dev,deepagents-durable,mcp,checkpoints-postgres]'
+python -m pip install -c python/constraints/qualified.txt -e 'python[dev,deepagents-durable,mcp,checkpoints-postgres]'
 python -m pytest python/tests -q
 python scripts/check_framework_registry.py
+```
+
+For TypeScript work, run from `sdk/`:
+
+```sh
 cd typescript
 npm ci
+npm run format:check
+npm run typecheck
 npm run build
 npm test
 ```

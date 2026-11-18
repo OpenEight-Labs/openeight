@@ -37,11 +37,16 @@ certify the separately pending HTTP, UI, billing, or exported-evidence lanes.
 
 ## Durable scripted workflow
 
-Install `openeight` with `pip install openeight` or `uv add openeight`, then
-install `'./agents/incident-response[durable]'` with pip (or enable
-the example's `durable` extra with uv). This adds the supported saver dependencies.
-Use a fresh Agent and its Agent-pinned key in the three OpenEight environment
-variables above. Durable mode currently supports the default eleven-tool profile
+From `cookbook/agents/incident-response/`, with the recipe's virtual environment
+active, install the durable extra:
+
+```bash
+python -m pip install -r requirements-qualified.txt '.[durable]'
+```
+
+This installs the declared published SDK and supported saver dependencies.
+Use a fresh Agent and its Agent-pinned key in the OpenEight environment variables
+listed in the [agent README](../README.md). Durable mode currently supports the default eleven-tool profile
 and the scripted `investigate`, `restart`, `rollback` and `scale` scenarios.
 
 ```bash
@@ -98,7 +103,7 @@ adopt this directory. Preserve the old runtime/configuration/key to drain its
 pending approvals. Initialize a fresh directory and a separate Agent/key for the
 new runtime, configure its policies, then send new work there while the old
 runtime drains. A fresh directory alone provides no server-catalog isolation.
-Use the SDK's [public API documentation](../../../../sdk/python/README.md#documentation)
+Use the SDK's [public API documentation](../../../../sdk/python/README.md#documentation-and-support)
 for durable execution APIs. Keep the runtime and storage under one application's
 ownership; reconcile uncertain destination effects before retrying them.
 Provider mode, QC, Console visual acceptance and publication remain
@@ -110,12 +115,11 @@ Provider mode supports explicit Anthropic and OpenAI adapters. Set
 `INCIDENT_PROVIDER_MODEL=anthropic:<explicit-model-id>` or
 `INCIDENT_PROVIDER_MODEL=openai:<explicit-model-id>` and `INCIDENT_PROVIDER_API_KEY`,
 then use `--mode provider`. For OpenAI, install the optional adapter with the
-supplemental pins from the repository root:
+supplemental pins from `cookbook/agents/incident-response/`, with the recipe's
+virtual environment active:
 
 ```bash
-/tmp/incident-agent-venv/bin/python -m pip install \
-  -r agents/incident-response/requirements-openai.txt \
-  './agents/incident-response[openai]'
+python -m pip install -r requirements-openai.txt '.[openai]'
 ```
 
 The supplemental file includes the existing SDK-qualified framework closure and

@@ -1,5 +1,7 @@
 # OpenEight TypeScript SDK
 
+[Website](https://openeight.ai) · [Documentation](https://openeight.ai/docs)
+
 The `@openeight/sdk` package provides agent registration, readiness,
 Decisions, approval-state polling, and Run/Event telemetry over OpenEight Connect
 JSON. Configure an external endpoint, Workspace API key and Agent name. This

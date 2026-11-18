@@ -38,13 +38,24 @@ agent's `docs/`. Give configuration defaults a concrete use case.
 
 ## Verification
 
-Run `python -m unittest discover -s tests -v` from the root. This checks literal
+From the repository root, run:
+
+```sh
+cd cookbook
+python -m unittest discover -s tests -v
+```
+
+This checks literal
 configuration loading, safe diagnostics, command routing, all credential-free
 samples and the order-lookup tool outcomes. Run each runnable recipe's tests
-with `python cookbook.py test <agent> -- -q` after setup.
+with `python cookbook.py test <agent> -- -q` from `cookbook/` after
+[recipe setup](setup.md).
 
-Both agents and both runnable tool-pattern suites run on
-every pull request. They execute
+CI selects both agents and both runnable tool-pattern suites for cookbook,
+Python SDK and shared repository changes; TypeScript-only changes skip them.
+Managed integration jobs install and verify the exact SDK wheel built from the
+checked-out source. Ordinary recipe setup uses the declared published SDK.
+The integration tests execute
 the real SDK and framework, use deterministic models, and intercept public HTTPX
 send methods to return control-service responses without network I/O. SDK request
 serialization, response validation, decisions, approval polling and telemetry

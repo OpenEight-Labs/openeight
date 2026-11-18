@@ -3,7 +3,8 @@
 Start with the [README](README.md), [cookbook setup](cookbook/guides/setup.md) and
 [SDK guides](sdk/README.md). If you are still stuck, search the
 [existing issues](https://github.com/OpenEight-Labs/openeight/issues) before opening
-one. Public issues cover this repository's SDKs and cookbook.
+one. Public issues cover this repository's SDKs and cookbook. For hosted-product
+information, visit the [OpenEight website](https://openeight.ai).
 
 | What you need | Where to go |
 | --- | --- |
@@ -16,8 +17,8 @@ one. Public issues cover this repository's SDKs and cookbook.
 Include package versions or your source revision, runtime versions and a small
 synthetic reproduction. Remove credentials, customer data, private endpoints and
 runtime state before posting logs or attachments. Hosted account, billing and
-private operational matters do not belong in public issues; use your existing
-private service contact.
+private operational matters do not belong in public issues; contact
+[hello@openeight.ai](mailto:hello@openeight.ai).
 
 Maintainers review reports as capacity permits. There is no guaranteed response
 time or support SLA for this repository. Keep follow-up information on the original

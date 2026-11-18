@@ -8,65 +8,129 @@ route and follow our [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Your first pull request
 
-1. Fork this repository on GitHub and clone your fork. From the checkout root,
-   create a focused branch such as `git switch -c docs/clarify-setup`.
-2. With Python 3.12 installed, create and activate an isolated environment:
+1. Fork this repository on GitHub. Replace `YOUR-USERNAME` below with your GitHub
+   username, then clone your fork and create a focused branch:
 
    ```sh
-   python3.12 -m venv .venv
-   . .venv/bin/activate
-   python --version
-   python scripts/check.py
+   git clone https://github.com/YOUR-USERNAME/openeight.git
+   cd openeight
+   git switch -c docs/clarify-setup
    ```
 
-   On Windows, activate with `.venv\Scripts\Activate.ps1` in PowerShell.
-   This initial check does not need model or OpenEight credentials. SDK integration
-   tests may skip until you install the SDK dependencies below.
-3. Make a focused change and run the checks for its area in the table below.
-   Include a regression test for a behavior fix; documentation corrections do not
-   need artificial tests. Follow [SDK development](sdk/CONTRIBUTING.md) or
-   [cookbook development](cookbook/CONTRIBUTING.md) for component conventions.
-4. Check `git diff --check` and review new files too. Commit only your intended
-   files, push the branch to your fork, and open a PR against `main`.
-5. Explain the problem, resulting behavior and exact verification. Respond to
-   review comments and update the same PR. A maintainer decides when it is ready
-   to merge; see [maintainers and decisions](MAINTAINERS.md).
+   Use a `docs/`, `fix/`, `feat/` or `chore/` branch appropriate to your change.
+2. Choose the setup below for your contribution. You do not need both SDKs for
+   documentation or cookbook work.
+3. Make a focused change and run the applicable checks. Include a regression test
+   for a behavior fix; documentation corrections do not need artificial tests.
+4. Run `git diff --check`, review your diff and inspect new files. Commit only
+   intended files, push your branch to your fork, and open a PR against `main`.
+   Use the PR template to explain the problem, resulting behavior and verification,
+   including checks you could not run and why.
 
-For Python SDK work, install from the repository root:
+### After opening a PR
 
-```sh
-python -m pip install -c sdk/python/constraints/qualified.txt -e 'sdk/python[dev,deepagents-durable,mcp,checkpoints-postgres]'
-```
+GitHub Actions runs the checks selected for your changes. Workflows from outside
+contributors may wait for maintainer approval before running. If checks fail,
+inspect their logs, make corrections and push to the same branch. Respond to
+review feedback in the PR so the discussion and decisions stay together.
 
-For TypeScript work, use Node 24 and run `npm ci` from `sdk/typescript/`.
-You can contribute documentation or local sample improvements without setting up
-both SDKs. Reproducible bug reports and clearer examples are useful contributions
-on their own.
-
-SDK changes and affected recipes belong in the same PR. Link a corresponding
-OpenEight-Labs/skills PR when executable public instructions change, or explain
-why none is needed. Python and TypeScript releases remain independent; cookbook
-changes do not publish SDK packages. Publication follows [release gates](RELEASING.md).
+The project currently has one maintainer, who decides when a PR is ready to merge.
+Community reviews are welcome but do not grant merge or publication authority.
+Reviews happen as capacity permits; see [maintainers and decisions](MAINTAINERS.md)
+for the review policy. Merging a PR does not publish an SDK release.
 
 ## Development and verification
 
-Use Python 3.12 for the current qualification lane and Node 24 for TypeScript.
-Cookbook local samples support Python 3.11–3.14. Python core and managed-framework
-support differ; see [SDK setup](sdk/README.md) and the
-[qualified dependency environment](sdk/python/constraints/README.md).
-Check `python --version` and `node --version` before running commands. Use an
-isolated Python environment and `npm ci` with the committed TypeScript lockfile.
+Choose the path matching your change. Unless a block explicitly changes directory,
+run commands from the repository root. Use Python 3.12 for the current qualification
+lane and Node 24 for TypeScript. Cookbook local samples support Python 3.11–3.14;
+Python core and managed-framework support differ, as described in [SDK setup](sdk/README.md).
 
-For Python SDK changes, also run `python -m ruff check sdk/python/openeight sdk/python/typing_tests`
-and `python -m mypy --config-file sdk/python/pyproject.toml sdk/python/typing_tests`
-from the root after installing the SDK development dependencies. For cookbook
-changes, run `python -m ruff check cookbook`.
+### Documentation
 
-Start with `python scripts/check.py` from the repository root. It checks generated
-error mappings, framework declarations, the public SDK surface, SDK tooling and
-selected dependency-free cookbook behavior. It does not run the full SDK,
-TypeScript or managed-recipe suites; SDK-dependent tests can skip without an
-installed SDK.
+Check links, heading anchors, command paths and `git diff --check`. Run changed
+examples where practical using their documented setup. Prose-only changes do not
+require installing Python or Node locally. Reproducible bug reports and clearer
+examples are useful contributions too.
+
+### Python environment
+
+For Python SDK or cookbook work, create an isolated environment from the repository
+root, then follow the relevant section below:
+
+```sh
+python3.12 -m venv .venv
+. .venv/bin/activate
+python --version
+```
+
+On Windows PowerShell, use `py -3.12 -m venv .venv` and activate with
+`.venv\Scripts\Activate.ps1`. Customer Support requires macOS, Linux or WSL for
+its POSIX state locks.
+
+### Python SDK
+
+Install the SDK and development tools with the qualified constraints, then run
+lint, typing checks and tests:
+
+```sh
+python -m pip install -c sdk/python/constraints/qualified.txt -e 'sdk/python[dev,deepagents-durable,mcp,checkpoints-postgres]'
+python -m ruff check sdk/python/openeight sdk/python/typing_tests
+python -m mypy --config-file sdk/python/pyproject.toml sdk/python/typing_tests
+python -m pytest sdk/python/tests -q
+python scripts/check.py
+```
+
+See [SDK development](sdk/CONTRIBUTING.md) for generated contracts and
+[test environments](sdk/python/constraints/README.md) for qualification details.
+Set `OPENEIGHT_COOKBOOK_ROOT` to this checkout's absolute `cookbook/` path when
+running cross-component SDK qualification. Tests requiring those inputs may skip
+without them; report skips with your results.
+
+### Cookbook
+
+Install Ruff into your active environment before linting. Local samples and
+launcher checks do not need model or OpenEight credentials:
+
+```sh
+python -m pip install 'ruff==0.12.12'
+python -m ruff check cookbook
+python scripts/check.py
+```
+
+Follow [cookbook development](cookbook/CONTRIBUTING.md) for recipe conventions and
+[recipe setup](cookbook/guides/setup.md) for each recipe's separate environment.
+Managed recipe tests require setup with the published SDK; they use deterministic
+external-service responses and do not require live credentials. Local checks may
+skip SDK-dependent tests until dependencies are installed. Report those skips;
+they do not establish managed-integration coverage.
+
+### TypeScript SDK
+
+With Node 24 installed, run:
+
+```sh
+node --version
+cd sdk/typescript
+npm ci
+npm run format:check
+npm run typecheck
+npm run build
+npm test
+cd ../..
+```
+
+Use `npm ci` with the committed lockfile. See [SDK development](sdk/CONTRIBUTING.md)
+for shared contract checks.
+
+### Checks by changed area
+
+For code or tooling changes, also run `python scripts/check.py` from the repository
+root using Python 3.12. TypeScript-only contributors can use the Python environment
+instructions above for this check. It checks generated error mappings, framework
+declarations, the public SDK surface, SDK tooling and selected dependency-free
+cookbook behavior. It does not run the full SDK, TypeScript or managed-recipe suites;
+SDK-dependent tests can skip without an installed SDK.
 
 | Changed area | Additional verification |
 | --- | --- |
@@ -78,12 +142,15 @@ installed SDK.
 | Package metadata, exports or release tooling | Installed-distribution and external-consumer checks in [RELEASING.md](RELEASING.md) |
 | Documentation only | Check links, command paths and whitespace; execute changed local examples where practical |
 
-Use the [SDK guide](sdk/CONTRIBUTING.md) and [cookbook guide](cookbook/CONTRIBUTING.md)
-for component details. Set `OPENEIGHT_COOKBOOK_ROOT` to this checkout's absolute
-`cookbook/` directory for cross-component SDK qualification. Use
-`git diff --check` and inspect untracked files separately. Record runtime and
-dependency versions, explain skipped checks, and distinguish local tests from
-backend, live-provider and published-package acceptance.
+SDK changes and affected recipes belong in the same PR. When a change affects
+executable instructions maintained in [OpenEight-Labs/skills](https://github.com/OpenEight-Labs/skills),
+identify the affected instructions and coordinate with the maintainer; link a
+corresponding skills PR if one is opened. Unrelated changes need no skills PR.
+Python and TypeScript releases remain independent; cookbook changes do not
+publish SDK packages.
+
+Record runtime and dependency versions, explain skipped checks, and distinguish
+local tests from backend, live-provider and published-package acceptance.
 
 Preserve unrelated work and durable runtime state. Security-sensitive behavior,
 public contracts and release changes follow the

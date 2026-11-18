@@ -1,189 +1,192 @@
 # OpenEight Python SDK
 
-OpenEight adds observation, policy enforcement and human approval to AI agents.
-Build new agents or connect existing ones using LangChain, Deep Agents, or the
-direct Python client.
+OpenEight checks policy before an agent calls a tool, pauses actions for human
+approval when required, and records execution telemetry. For example, a support
+agent can look up an order while a refund requires approval before it executes.
 
-[Documentation](https://openeight.ai/docs) · [Get started](https://openeight.ai/docs/connect-agent?language=python&integration=langchain&execution=sync) · [Compatibility](https://openeight.ai/docs/compatibility?language=python&integration=langchain&execution=sync)
+Use the managed LangChain or Deep Agents integrations, or add decision checks to
+your own application with the direct Python client. Governance applies to calls
+routed through OpenEight; it does not govern tools your application invokes outside
+that integration.
+
+[Website](https://openeight.ai) · [Documentation](https://openeight.ai/docs) · [Runnable examples](https://github.com/OpenEight-Labs/openeight/tree/main/cookbook) · [Report an issue](https://github.com/OpenEight-Labs/openeight/issues)
+
+## Requirements
+
+For the managed examples, use standard CPython 3.11–3.14 and an isolated virtual
+environment. You also need:
+
+- Access to an OpenEight deployment. The hosted service is configured through the
+  [setup guide](https://openeight.ai/docs/connect-agent?language=python&integration=langchain&execution=sync);
+  the server is not included in this package.
+- A registered Agent and its bound OpenEight API key.
+- Active policies for the tools you intend to run. The example below registers its
+  tool before pausing so you can configure its policy in the Console.
+- A model that supports tool calling, its provider integration package, and its
+  provider credentials. These are separate from your OpenEight API key.
 
 ## Installation
 
-The initial public release is being prepared. Publication and registry acceptance
-are pending; the commands below apply once the release is available on PyPI.
-
-```bash
-pip install openeight
+```sh
+python -m pip install openeight
 ```
 
 Or, in a uv project:
 
-```bash
+```sh
 uv add openeight
 ```
 
-Managed LangChain and Deep Agents integrations support standard CPython
-3.11–3.14. LangChain dependencies are included; see
-[Compatibility](https://openeight.ai/docs/compatibility?language=python&integration=langchain&execution=sync)
-for optional integrations and supported versions.
+LangChain is included in the default installation. For Deep Agents, use
+`python -m pip install 'openeight[deepagents]'` or `uv add 'openeight[deepagents]'`.
+Model-provider packages are installed separately.
 
-## Choose your integration
+The SDK pins a qualified set of LangChain dependencies. Check
+[compatibility](https://openeight.ai/docs/compatibility?language=python&integration=langchain&execution=sync)
+before adding it to an existing application; independently upgrading those
+framework dependencies can produce an unsupported combination. See
+[optional integrations](https://github.com/OpenEight-Labs/openeight/blob/main/sdk/python/pyproject.toml)
+for SQLite durability, PostgreSQL checkpoints and MCP extras.
 
-- **[LangChain](https://openeight.ai/docs/langchain?language=python&integration=langchain&execution=sync)** — build tool-calling agents with OpenEight-managed governance and observation.
-- **[Deep Agents](https://openeight.ai/docs/deep-agents?language=python&integration=deepagents&execution=sync)** — govern supported Deep Agents workflows, including declarative child agents.
-- **[Direct Python SDK](https://openeight.ai/docs/direct-sdk?language=python&integration=direct&execution=sync)** — authorize tool attempts and report execution from your own application logic.
+## Quick start: govern an order lookup
 
-## Quick start
+This example uses OpenAI through `langchain-openai`, with an explicitly selected
+model. The tool reads synthetic data; it does not contact an order service or
+modify an order. The model and OpenEight calls are real network requests.
 
-Define your model and tools, or reuse them from an existing application.
-Follow [Get started](https://openeight.ai/docs/connect-agent?language=python&integration=langchain&execution=sync)
-to create an Agent API key and set `OPENEIGHT_API_KEY`.
+Install the provider integration used by the cookbook:
+
+```sh
+python -m pip install 'langchain-openai==1.6.7'
+```
+
+Set these variables in your local environment, replacing the placeholders:
+
+```sh
+export OPENEIGHT_ENDPOINT="https://app.openeight.ai"
+export OPENEIGHT_AGENT_NAME="your-registered-agent-name"
+export OPENEIGHT_API_KEY="your-openeight-agent-api-key"
+export OPENAI_API_KEY="your-openai-api-key"
+export OPENAI_MODEL="your-tool-capable-openai-model"
+```
+
+Save the following as `quickstart.py`:
 
 ```python
 import os
 
+from langchain.tools import tool
+from langchain_openai import ChatOpenAI
+
 from openeight import OpenEightConfig
-from openeight.langchain import create_agent
+from openeight.langchain import ApprovalConfig, create_agent
 
-# Supply your configured model and tool functions.
-agent = create_agent(
+
+@tool
+def lookup_order(order_id: str) -> str:
+    """Look up the delivery status of a synthetic example order."""
+    status = "delivered" if order_id == "ORD-1001" else "not found"
+    print(f"Tool executed: {order_id} — {status}")
+    return status
+
+
+model = ChatOpenAI(
+    model=os.environ["OPENAI_MODEL"],
+    api_key=os.environ["OPENAI_API_KEY"],
+)
+
+with create_agent(
     model=model,
-    tools=tools,
+    tools=[lookup_order],
+    system_prompt="Use lookup_order for order-status questions; do not guess.",
     openeight=OpenEightConfig(
-        endpoint="https://app.openeight.ai",
-        agent_name="payments-worker",
+        endpoint=os.environ["OPENEIGHT_ENDPOINT"],
+        agent_name=os.environ["OPENEIGHT_AGENT_NAME"],
         credential=os.environ["OPENEIGHT_API_KEY"],
+        on_block="raise",
+        approval=ApprovalConfig(timeout=120),
     ),
-)
-
-result = agent.invoke({"messages": [("user", "Hello")]})
+) as agent:
+    input("Activate a policy for lookup_order in the Console, then press Enter: ")
+    status = agent.readiness()
+    if status.unpublished or not status.readiness.fully_policy_ready:
+        raise RuntimeError("Tool policies are not ready; check the Console.")
+    result = agent.invoke(
+        {"messages": [("user", "Look up the status of order ORD-1001.")]}
+    )
+    print(result["messages"][-1].content)
 ```
 
-Configure tool permissions and activate policies in the console before governed
-tools execute. Remote OpenEight endpoints require HTTPS.
+Run `python quickstart.py`. When it pauses, find `lookup_order` under your Agent
+in the Console and activate a policy allowing this example lookup. Return to the
+terminal and press Enter. If readiness is incomplete, finish configuring the
+Agent and its tool policy before rerunning.
 
-For a complete runnable application, see the
-[refund-agent example](https://github.com/OpenEight-Labs/openeight/tree/main/cookbook/patterns/governed-refund).
+When the model calls the allowed tool, you will see
+`Tool executed: ORD-1001 — delivered`, followed by the model's answer. The answer
+wording can vary. Check the Agent's run and Decision in the Console as well:
+a natural-language response alone does not prove a tool executed. The `with`
+block owns the session and closes it on exit.
 
-## Documentation
+### Denial and human approval
 
-- **Guides:** [Sessions and invocation](https://openeight.ai/docs/guides/sessions?language=python&integration=langchain&execution=sync), [streaming and cleanup](https://openeight.ai/docs/guides/streaming?language=python&integration=langchain&execution=sync), and [threads and checkpoints](https://openeight.ai/docs/guides/checkpoints?language=python&integration=langchain&execution=sync).
-- **SDK reference:** [Constructors and execution](https://openeight.ai/docs/reference/constructors?language=python&integration=langchain&execution=sync), and [configuration, approval waiting and content capture](https://openeight.ai/docs/reference/configuration?language=python&integration=langchain&execution=sync).
+Change the tool policy in the Console and rerun to exercise other outcomes:
 
-Completion captures the later of startup and the local clock once, avoiding a
-negative duration after clock skew. Retries keep that timestamp unchanged.
+| Outcome | Behavior in this example |
+| --- | --- |
+| Allow | Executes the lookup and returns its result to the model. |
+| Deny | Does not execute the tool; raises `BlockedError` because `on_block="raise"`. |
+| Approval required | Waits for human review, then revalidates authorization before execution. Rejection or expiration blocks the tool. |
+| Approval wait times out | Raises `ApprovalTimeout` without executing the pending tool. |
 
-## Direct request preparation and recovery
+The two-minute approval timeout keeps this terminal demo bounded. Approval must
+come from an authorized reviewer in the Console; the agent cannot approve its own
+request. For longer pauses or process restarts, use the
+[checkpoint guide](https://openeight.ai/docs/guides/checkpoints?language=python&integration=langchain&execution=sync).
 
-Prepare identity before sending when an acknowledgement might be lost. Use the
-acknowledged `tool`, `tool_version`, exact-version `readiness` and policy-selected
-`selected_values` from your registration/readiness flow:
+## Choose your integration
 
-```python
-from openeight import prepare_decision, prepare_run_identity, RunCheckpoint
+| Integration | Start here |
+| --- | --- |
+| Existing or new LangChain agent | [Managed LangChain guide](https://openeight.ai/docs/langchain?language=python&integration=langchain&execution=sync) |
+| Deep Agents | [Deep Agents guide](https://openeight.ai/docs/deep-agents?language=python&integration=deepagents&execution=sync) |
+| Your own execution loop | [Direct-client walkthrough](https://openeight.ai/docs/direct-sdk?language=python&integration=direct&execution=sync): register tools, check readiness, request decisions, and execute only when authorized. |
+| A complete application | [Customer Support](https://github.com/OpenEight-Labs/openeight/tree/main/cookbook/agents/customer-support) or [governed refund](https://github.com/OpenEight-Labs/openeight/tree/main/cookbook/patterns/governed-refund) |
 
-identity = prepare_run_identity(attributes={"job": "example"})
-run = client.governed_run(identity=identity)
-prepared = prepare_decision(
-    run_id=run.run_id,
-    tool_id=tool.id,
-    tool_version_id=tool_version.id,
-    input={},
-    policy_contract_set_digest=readiness.policy_contract_set_digest,
-    selected_values=selected_values,
-)
-result = client.decide_prepared(prepared)
-# The application checks authorization before performing an external action.
-checkpoint = run.suspend()
-saved = checkpoint.to_dict()
-run = client.resume_governed_run(RunCheckpoint.from_dict(saved))
-run.close()
-```
+## Troubleshooting and compatibility
 
-`PreparedDecision` snapshots selected values and allocates identity/time once.
-Retries use the same value and authenticated machine actor, including the same API
-key identity. Changing credentials can cause a server replay conflict even for the
-same Agent name. Neither the checkpoint nor the prepared request contains credentials.
+- **Authentication fails:** check the endpoint, registered Agent name and bound
+  OpenEight key. A model-provider key cannot authenticate to OpenEight. Remote
+  OpenEight endpoints require HTTPS.
+- **Tools are not ready:** check tool registration and active policies in the
+  Console. Registration alone does not establish policy readiness.
+- **The tool does not execute:** inspect the Decision and approval state. Do not
+  bypass a denial or pending approval by calling the tool directly.
+- **Unsupported framework configuration:** compare installed versions and the
+  integration you selected with the compatibility guide before upgrading packages.
 
-Initial `allow` authorizes execution. After `approval_required`, observe `approved`
-for that exact Decision, then replay the unchanged prepared request to revalidate
-current authorization. Require matching identities, `replayed=True` and verdict
-`approval_required` or `allow`. Approval does not change the stored verdict. Other
-states/verdicts and replay errors refuse execution; the SDK never polls or executes
-an external action automatically.
+Initial `0.0.x` releases are experimental and may introduce breaking changes.
+Pin a version you have qualified and read the
+[versioning policy](https://github.com/OpenEight-Labs/openeight/blob/main/docs/versioning.md)
+before upgrading. Core package metadata accepts Python 3.11–3.15; managed
+LangChain and Deep Agents qualification currently covers Python 3.11–3.14.
+The package includes `py.typed`; model outputs and native application state still
+need your application's own schema validation.
 
-`close()` seals Event admission. A failed Event flush or uncertain completion can
-be retried on the same Run before closing its client. The completion timestamp and
-request remain unchanged. Acknowledged completion is never resent after cleanup
-failure; terminal cleanup errors may persist. Client shutdown remains terminal.
+## Documentation and support
 
-Checkpoints contain suspension facts, not queued Events, storage or distributed
-fencing. Resume under exclusive application ownership and the original endpoint,
-Agent and Workspace authority. Locally owned or completion-attempted Runs cannot
-resume. Repeated suspend/resume cycles are supported.
-
-New checkpoints retain `attributes_json` verbatim so numeric spelling and key order
-survive Python/TypeScript transfer. The `attributes` property returns a copy.
-Legacy version-1 checkpoints without encoded attributes remain accepted and export
-without that field, but exact cross-language replay cannot be guaranteed. Server
-identity conflicts remain refusals.
-
-Optional `workflow_id`/`workflow_version` are paired UUIDv5/v7 and SemVer references
-(up to 128 UTF-8 bytes), carried unchanged through Run and Decision writes. They
-do not provision a workflow or grant authority. Timestamps normalize to UTC
-microseconds; Decision source times exclude the zero instant at year 1.
-
-### Raw telemetry acceptance
-
-`write_telemetry` preserves valid extra wire fields and Python integer or canonical
-decimal-string int64 metrics. Run rows require native UUIDv7 identity, status and
-start time; completion also requires an end time at or after startup. Event rows
-require native UUIDv7 Event/Run IDs, name, kind, operation, outcome and occurrence
-time. Parent-Run, parent-Event and raw Decision references accept UUIDv5/v7.
-Typed `Event` retains its existing UUIDv7 correlation rules.
-
-Supported kinds are `span`, `llm_call`, `tool_call`, `lifecycle`; operations are
-`unspecified`, `invoke`, `stream`; outcomes are `unspecified`, `success`, `error`,
-`interrupted`. Span roles, tool references, payload combinations and token/cache/
-timing arithmetic are validated before admission. JSON payload fields retain the
-wire names `input_json`, `output_json`, `error_json`, `attributes_json`.
-Unknown fields are forwarded without becoming SDK authorization or identity fields.
-Server-owned authority selectors are rejected at the record root; names inside
-application JSON remain data. Requests remain limited to 1,000 records and 4 MiB.
-
-The shared structured-integer range is ±(2**53 - 1). Python retains its existing
-int64 support outside that portable subset. No implicit string conversion is added.
-Framework compatibility declarations and managed integrations are unchanged.
-
-Direct Event admission distinguishes omitted payload fields from encoded JSON `null`.
-Error outcomes require an error payload and forbid output; success forbids an error
-payload. Interrupted Events forbid output/error, and lifecycle Events forbid all
-input/output/error payloads. Spans and LLM Events cannot carry Tool or Decision
-references. Tool calls require a tool name. Decision-linked tool calls require a
-registered Tool/ToolVersion pair, a name, a success/error outcome and object input.
-Identified lifecycle Events require the registered pair and name; a bare lifecycle
-Event remains valid. Invalid records are rejected before queue ownership so valid
-Events can still flush and complete their Run. Recognized ProtoJSON camelCase
-aliases receive the same validation; sending both spellings of one field is rejected.
+- [Sessions](https://openeight.ai/docs/guides/sessions?language=python&integration=langchain&execution=sync)
+  and [streaming and cleanup](https://openeight.ai/docs/guides/streaming?language=python&integration=langchain&execution=sync).
+- [Configuration, approval waiting and opt-in content capture](https://openeight.ai/docs/reference/configuration?language=python&integration=langchain&execution=sync).
+- [Direct request preparation and recovery](https://github.com/OpenEight-Labs/openeight/blob/main/sdk/python/docs/direct-recovery.md)
+  and [raw telemetry reference](https://github.com/OpenEight-Labs/openeight/blob/main/sdk/python/docs/raw-telemetry.md).
+- [Support](https://github.com/OpenEight-Labs/openeight/blob/main/SUPPORT.md),
+  [contributing](https://github.com/OpenEight-Labs/openeight/blob/main/CONTRIBUTING.md)
+  and [private vulnerability reporting](https://github.com/OpenEight-Labs/openeight/blob/main/SECURITY.md).
 
 ## License
 
 Copyright © 2026 OpenEight Systems Private Limited. Licensed under the
-Apache License, Version 2.0. See the included LICENSE and NOTICE files.
-The SDK license does not grant access to OpenEight hosted services, which remain
-subject to separate service terms.
-
-## Version compatibility
-
-Initial `0.0.x` releases are experimental and may introduce breaking changes.
-Pin qualified versions and read the [versioning policy](../../docs/versioning.md) before upgrading.
-
-## Type checking
-
-The distribution includes `py.typed`. Direct-client methods, managed lifecycle
-methods and catalog results expose inline type annotations. Native agent state,
-model output and application context remain framework-defined values (`Any`);
-validate those with your application's state or response schema.
-
-From `sdk/python/`, run `python -m mypy typing_tests` after installing the `dev`
-extra. These consumer checks verify both result types and rejected invalid calls.
-CI checks them against the built SDK wheel, including ordinary and durable APIs.
+[Apache License, Version 2.0](https://github.com/OpenEight-Labs/openeight/blob/main/LICENSE).
+Retain the included LICENSE and NOTICE files when redistributing. The SDK license
+does not grant access to hosted services, which remain subject to separate terms.
