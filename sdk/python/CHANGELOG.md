@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — 0.0.1
+## 0.0.1
 
 Initial public Python SDK release, licensed under Apache-2.0. Release notes describe
 the public package; hosted-service terms and third-party dependency licenses remain

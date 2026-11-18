@@ -76,9 +76,9 @@ and apply real policy decisions, follow the [setup guidance](#availability-and-i
 | Component | Availability | Next step |
 | --- | --- | --- |
 | Local cookbook samples | Runnable now without credentials or an installed SDK | [Cookbook](cookbook/README.md#start-with-local-data) |
-| Python SDK | Source available; first PyPI release pending | [Installation](sdk/python/README.md#installation) after publication; [development setup](CONTRIBUTING.md#development-and-verification) for source work |
+| Python SDK | [0.0.1 published on PyPI](https://pypi.org/project/openeight/0.0.1/) | [Installation](sdk/python/README.md#installation); [development setup](CONTRIBUTING.md#development-and-verification) for source work |
 | TypeScript SDK | Source available; not published to npm | [Build and test from source](sdk/typescript/README.md#qualification) |
-| Governed cookbook examples | Require the published Python SDK, model credentials and OpenEight configuration | [Recipe setup](cookbook/guides/setup.md) after the Python release |
+| Governed cookbook examples | Require the published Python SDK, model credentials and OpenEight configuration | [Recipe setup](cookbook/guides/setup.md) |
 
 Governed examples need access to an OpenEight deployment, a configured Agent and
 its bound API key, an explicitly selected model, and separate model-provider
