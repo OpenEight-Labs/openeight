@@ -1,0 +1,6 @@
+SQLite journal code in storage.py, journal_schema.py and journal_validation.py
+is adapted from the OpenEight SDK.
+OpenEight SDK
+Copyright © 2026 OpenEight Systems Private Limited
+
+The application adaptation uses local validation/errors and owns its SQLite transactions; no SDK implementation modules are imported.

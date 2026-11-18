@@ -1,0 +1,4 @@
+{
+  "ORDER-1001": {"status": "delivered", "promised_date": "2026-01-12", "delivered_date": "2026-01-11"},
+  "ORDER-1002": {"status": "in_transit", "promised_date": "2026-01-12", "delivered_date": null}
+}

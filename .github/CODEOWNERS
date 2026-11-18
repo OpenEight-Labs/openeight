@@ -1,0 +1,10 @@
+# Ownership and review routing; required code-owner approval is deferred during solo maintenance.
+* @vasu-openeight
+/.github/ @vasu-openeight
+/AGENTS.md @vasu-openeight
+/SECURITY.md @vasu-openeight
+/MAINTAINERS.md @vasu-openeight
+/LICENSE @vasu-openeight
+/NOTICE @vasu-openeight
+
+/cookbook/ @vasu-openeight

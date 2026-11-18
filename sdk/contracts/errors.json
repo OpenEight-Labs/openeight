@@ -1,0 +1,77 @@
+{
+  "format_version": 1,
+  "errors": [
+    {
+      "reason": "ACCESS_UNAVAILABLE",
+      "domain": "openeight.access",
+      "connect_code": "unavailable",
+      "http_status": 503
+    },
+    {
+      "reason": "AGENT_LIMIT_REACHED",
+      "domain": "openeight.access",
+      "connect_code": "permission_denied",
+      "http_status": 403
+    },
+    {
+      "reason": "AUTHORIZATION_STALE",
+      "domain": "openeight.govern",
+      "connect_code": "failed_precondition",
+      "http_status": 400
+    },
+    {
+      "reason": "DECISION_LIMIT_REACHED",
+      "domain": "openeight.access",
+      "connect_code": "permission_denied",
+      "http_status": 403
+    },
+    {
+      "reason": "EXECUTION_BLOCKED",
+      "domain": "openeight.govern",
+      "connect_code": "failed_precondition",
+      "http_status": 400
+    },
+    {
+      "reason": "TOOL_NOT_GOVERNED",
+      "domain": "openeight.govern",
+      "connect_code": "failed_precondition",
+      "http_status": 400
+    },
+    {
+      "reason": "TRIAL_EXPIRED",
+      "domain": "openeight.access",
+      "connect_code": "permission_denied",
+      "http_status": 403
+    },
+    {
+      "reason": "USER_LIMIT_REACHED",
+      "domain": "openeight.access",
+      "connect_code": "permission_denied",
+      "http_status": 403
+    },
+    {
+      "reason": "agent_integration_mismatch",
+      "domain": "openeight.identity",
+      "connect_code": "failed_precondition",
+      "http_status": 400
+    },
+    {
+      "reason": "invalid_agent_integration",
+      "domain": "openeight.identity",
+      "connect_code": "invalid_argument",
+      "http_status": 400
+    },
+    {
+      "reason": "policy_evidence_too_large",
+      "domain": "openeight.govern",
+      "connect_code": "resource_exhausted",
+      "http_status": 429
+    },
+    {
+      "reason": "policy_input_contract_stale",
+      "domain": "openeight.govern",
+      "connect_code": "failed_precondition",
+      "http_status": 400
+    }
+  ]
+}

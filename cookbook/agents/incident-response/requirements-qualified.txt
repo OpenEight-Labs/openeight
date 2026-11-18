@@ -1,0 +1,2 @@
+# Scripted/default runtime. Provider adapters are optional; see requirements-openai.txt.
+openeight[deepagents-durable]==0.0.1

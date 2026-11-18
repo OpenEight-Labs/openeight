@@ -1,0 +1,17 @@
+[
+  {"name":"utf16_key_order","raw":"{\"\":1,\"😀\":2}","canonical":"{\"😀\":2,\"\":1}","valid":true},
+  {"name":"decimal","raw":"{\"value\":1.0}","canonical":"{\"value\":1}","valid":true},
+  {"name":"integer","raw":"{\"value\":1}","canonical":"{\"value\":1}","valid":true},
+  {"name":"negative_zero","raw":"{\"value\":-0.0}","canonical":"{\"value\":0}","valid":true},
+  {"name":"unicode","raw":"{\"value\":\"café 東京\"}","canonical":"{\"value\":\"café 東京\"}","valid":true},
+  {"name":"int64","raw":"{\"value\":[-9223372036854775808,9223372036854775807]}","canonical":"{\"value\":[-9223372036854775808,9223372036854775807]}","valid":true},
+  {"name":"nan","raw":"{\"value\":NaN}","valid":false},
+  {"name":"infinity","raw":"{\"value\":Infinity}","valid":false},
+  {"name":"surrogate","raw":"{\"value\":\"\\ud800\"}","valid":false},
+  {"name":"depth32","depth":32,"valid":true},
+  {"name":"depth33","depth":33,"valid":false},
+  {"name":"token64k","token_bytes":65536,"valid":true},
+  {"name":"token_over","token_bytes":65537,"valid":false},
+  {"name":"document1m","document_bytes":1048576,"valid":true},
+  {"name":"document_over","document_bytes":1048577,"valid":false}
+]

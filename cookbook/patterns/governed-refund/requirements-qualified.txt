@@ -1,0 +1,3 @@
+# Direct dependencies for the primary LangChain recipe. SDK extras pin native framework versions.
+openeight[langchain]==0.0.1
+langchain-openai==1.6.7

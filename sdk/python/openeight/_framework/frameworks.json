@@ -1,0 +1,1215 @@
+{
+  "format_version": 2,
+  "entries": [
+    {
+      "id": "langchain-01",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.3.18",
+        "langchain-core": "1.6.6",
+        "langgraph": "1.2.11",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "langchain-02",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.3.18",
+        "langchain-core": "1.6.6",
+        "langgraph": "1.2.12",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "langchain-03",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.4.0",
+        "langchain-core": "1.6.2",
+        "langgraph": "1.2.11",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "langchain-04",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.4.0",
+        "langchain-core": "1.6.6",
+        "langgraph": "1.2.11",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "langchain-05",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.4.0",
+        "langchain-core": "1.6.6",
+        "langgraph": "1.2.12",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "langchain-06",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.4.3",
+        "langchain-core": "1.6.6",
+        "langgraph": "1.2.11",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "langchain-07",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.4.3",
+        "langchain-core": "1.6.6",
+        "langgraph": "1.2.12",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "langchain-08",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.4.3",
+        "langchain-core": "1.6.7",
+        "langgraph": "1.2.14",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "langchain-09",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.4.3",
+        "langchain-core": "1.7.0",
+        "langgraph": "1.2.14",
+        "langgraph-prebuilt": "1.1.1",
+        "langgraph-checkpoint": "4.3.1"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "langchain-10",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.4.3",
+        "langchain-core": "1.7.3",
+        "langgraph": "1.2.14",
+        "langgraph-prebuilt": "1.1.1",
+        "langgraph-checkpoint": "4.3.1"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "langchain-durable-01",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "langchain": "1.4.0",
+        "langchain-core": "1.6.6",
+        "langgraph": "1.2.11",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0",
+        "langgraph-checkpoint-sqlite": "3.1.1",
+        "aiosqlite": "0.22.1"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "durable"
+        ],
+        [
+          "durable",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langchain-sqlite-v1"
+    },
+    {
+      "id": "deepagents-01",
+      "integration": "deepagents",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "deepagents": "0.7.23",
+        "langchain": "1.4.3",
+        "langchain-core": "1.6.7",
+        "langgraph": "1.2.14",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "deepagents-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "ordinary"
+        ],
+        [
+          "ordinary",
+          "stream"
+        ],
+        [
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "deepagents-durable-01",
+      "integration": "deepagents",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14",
+        "3.15"
+      ],
+      "packages": {
+        "deepagents": "0.7.23",
+        "langchain": "1.4.3",
+        "langchain-core": "1.6.7",
+        "langgraph": "1.2.14",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0",
+        "langgraph-checkpoint-sqlite": "3.1.1",
+        "aiosqlite": "0.22.1"
+      },
+      "implementation_id": "deepagents-v1",
+      "implementation_revision": 1,
+      "feature_sets": [
+        [
+          "durable"
+        ],
+        [
+          "durable",
+          "local_durable"
+        ],
+        [
+          "durable",
+          "local_durable",
+          "sync"
+        ],
+        [
+          "durable",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "deepagents-sqlite-v1"
+    },
+    {
+      "id": "langchain-managed-02",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14"
+      ],
+      "packages": {
+        "langchain": "1.4.3",
+        "langchain-core": "1.6.7",
+        "langgraph": "1.2.14",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 2,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "managed_integrations",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "managed_integrations",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "managed_integrations",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "managed_integrations",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "managed_integrations",
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "managed_integrations",
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "managed_integrations",
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "managed_integrations",
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "managed_integrations",
+          "ordinary"
+        ],
+        [
+          "managed_integrations",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "managed_integrations",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "managed_integrations",
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "deepagents-managed-02",
+      "integration": "deepagents",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14"
+      ],
+      "packages": {
+        "deepagents": "0.7.23",
+        "langchain": "1.4.3",
+        "langchain-core": "1.6.7",
+        "langgraph": "1.2.14",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0"
+      },
+      "implementation_id": "deepagents-v1",
+      "implementation_revision": 2,
+      "feature_sets": [
+        [
+          "checkpoint",
+          "managed_integrations",
+          "ordinary"
+        ],
+        [
+          "checkpoint",
+          "managed_integrations",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "checkpoint",
+          "managed_integrations",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "checkpoint",
+          "managed_integrations",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "managed_integrations",
+          "mcp",
+          "ordinary"
+        ],
+        [
+          "managed_integrations",
+          "mcp",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "managed_integrations",
+          "mcp",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "managed_integrations",
+          "mcp",
+          "ordinary",
+          "sync"
+        ],
+        [
+          "managed_integrations",
+          "ordinary"
+        ],
+        [
+          "managed_integrations",
+          "ordinary",
+          "stream"
+        ],
+        [
+          "managed_integrations",
+          "ordinary",
+          "stream",
+          "sync"
+        ],
+        [
+          "managed_integrations",
+          "ordinary",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langgraph-v1"
+    },
+    {
+      "id": "deepagents-durable-02",
+      "integration": "deepagents",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14"
+      ],
+      "packages": {
+        "deepagents": "0.7.23",
+        "langchain": "1.4.3",
+        "langchain-core": "1.6.7",
+        "langgraph": "1.2.14",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0",
+        "langgraph-checkpoint-sqlite": "3.1.1",
+        "aiosqlite": "0.22.1"
+      },
+      "implementation_id": "deepagents-v1",
+      "implementation_revision": 2,
+      "feature_sets": [
+        [
+          "durable",
+          "managed_integrations"
+        ],
+        [
+          "durable",
+          "local_durable",
+          "managed_integrations"
+        ],
+        [
+          "durable",
+          "local_durable",
+          "managed_integrations",
+          "sync"
+        ],
+        [
+          "durable",
+          "managed_integrations",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "deepagents-sqlite-v1"
+    },
+    {
+      "id": "langchain-durable-02",
+      "integration": "langchain",
+      "python": [
+        "3.11",
+        "3.12",
+        "3.13",
+        "3.14"
+      ],
+      "packages": {
+        "langchain": "1.4.3",
+        "langchain-core": "1.6.7",
+        "langgraph": "1.2.14",
+        "langgraph-prebuilt": "1.1.0",
+        "langgraph-checkpoint": "4.2.0",
+        "langgraph-checkpoint-sqlite": "3.1.1",
+        "aiosqlite": "0.22.1"
+      },
+      "implementation_id": "langchain-v1",
+      "implementation_revision": 2,
+      "feature_sets": [
+        [
+          "durable",
+          "managed_integrations"
+        ],
+        [
+          "durable",
+          "managed_integrations",
+          "sync"
+        ],
+        [
+          "durable"
+        ],
+        [
+          "durable",
+          "sync"
+        ]
+      ],
+      "checkpoint_format": "langchain-sqlite-v1"
+    }
+  ]
+}

@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools>=84.1.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openeight"
+version = "0.0.1"
+description = "OpenEight agent observation and governance SDK"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.11,<3.16"
+dependencies = [
+    "httpx>=0.27",
+    "certifi>=2026.10.19",
+    "langchain==1.4.3",
+    "langchain-core==1.6.7",
+    "langgraph==1.2.14",
+    "langgraph-prebuilt==1.1.0",
+    "langgraph-checkpoint==4.2.0",
+    "langgraph-sdk>=0.4.6,<1",
+    "urllib3>=2.8.0,<3",
+    "packaging>=24",
+    "jsonschema==4.26.0",
+    "pydantic>=2.14.2; python_version >= '3.15'",
+    "ormsgpack>=1.13.0; python_version >= '3.15'",
+    "orjson>=3.13.0; python_version >= '3.15'",
+    "uuid-utils>=0.19.0; python_version >= '3.15'",
+]
+
+[project.urls]
+Homepage = "https://openeight.ai"
+Documentation = "https://openeight.ai/docs"
+Source = "https://github.com/OpenEight-Labs/openeight"
+Issues = "https://github.com/OpenEight-Labs/openeight/issues"
+
+[project.optional-dependencies]
+langchain-durable = ["langgraph-checkpoint-sqlite==3.1.1", "aiosqlite==0.22.1"]
+mcp = ["mcp==1.30.0"]
+checkpoints-postgres = ["langchain==1.4.3", "langchain-core==1.6.7", "langgraph==1.2.14", "langgraph-prebuilt==1.1.0", "langgraph-checkpoint==4.2.0", "langgraph-checkpoint-postgres==3.1.0", "psycopg[binary,pool]==3.3.8", "psycopg-pool==3.3.3"]
+dev = ["pytest>=8", "pytest-asyncio>=1", "ruff==0.12.12", "mypy==1.18.2", "build>=1,<2", "setuptools>=84.1.0", "wheel"]
+deepagents = ["deepagents==0.7.23", "langchain==1.4.3", "langchain-core==1.6.7", "langgraph==1.2.14", "langgraph-prebuilt==1.1.0", "langgraph-checkpoint==4.2.0", "langgraph-sdk>=0.4.6,<1", "urllib3>=2.8.0,<3", "packaging>=24"]
+deepagents-durable = ["deepagents==0.7.23", "langchain==1.4.3", "langchain-core==1.6.7", "langgraph==1.2.14", "langgraph-prebuilt==1.1.0", "langgraph-checkpoint==4.2.0", "langgraph-checkpoint-sqlite==3.1.1", "aiosqlite==0.22.1", "langgraph-sdk>=0.4.6,<1", "urllib3>=2.8.0,<3", "packaging>=24"]
+# Compatibility extra: LangChain is included in the default installation.
+langchain = []
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["openeight*"]
+
+[tool.ruff]
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
+
+[tool.setuptools.package-data]
+"openeight" = ["py.typed"]
+"openeight._framework" = ["frameworks.json"]
+
+[tool.mypy]
+python_version = "3.11"
+strict = true
+follow_imports = "silent"
+files = ["typing_tests"]

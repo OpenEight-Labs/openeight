@@ -1,0 +1,252 @@
+name: Python SDK release
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Publish verified distributions to production PyPI
+        type: boolean
+        default: false
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: python-sdk-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+      manifest: ${{ steps.distributions.outputs.manifest }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - name: Require a version-matching SDK tag
+        id: version
+        run: |
+          python - <<'PY'
+          import ast, os, re, tomllib
+          from pathlib import Path
+          project = tomllib.loads(Path('sdk/python/pyproject.toml').read_text())['project']
+          version = project['version']
+          assert project['name'] == 'openeight'
+          module = ast.parse(Path('sdk/python/openeight/__init__.py').read_text())
+          versions = [ast.literal_eval(node.value) for node in module.body if isinstance(node, ast.Assign) and any(isinstance(target, ast.Name) and target.id == '__version__' for target in node.targets)]
+          assert versions == [version], '__version__ must match pyproject.toml'
+          assert re.fullmatch(r'\d+\.\d+\.\d+', version), 'Expected a stable numeric SDK version'
+          assert os.environ['GITHUB_REF'] == f'refs/tags/python-v{version}', 'Run from the matching python-vVERSION tag'
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'version={version}\n')
+          PY
+      - name: Build wheel and source distribution
+        run: |
+          python -m pip install 'pip==26.3' 'build==1.6.1' 'twine==7.0.0'
+          python -m build --outdir dist sdk/python
+          python -m twine check --strict dist/*
+      - name: Verify distribution contents and retain hashes
+        id: distributions
+        run: |
+          python - <<'PY'
+          import ast, hashlib, json, os, re, tarfile, tomllib, zipfile
+          from pathlib import Path
+          root = Path('sdk/python')
+          version = tomllib.loads((root / 'pyproject.toml').read_text())['project']['version']
+          names = [f'openeight-{version}-py3-none-any.whl', f'openeight-{version}.tar.gz']
+          assert sorted(p.name for p in Path('dist').iterdir()) == sorted(names)
+          sources = {p.relative_to(root).as_posix(): p.read_bytes() for p in (root / 'openeight').rglob('*') if p.is_file() and (p.suffix == '.py' or p.name in {'frameworks.json', 'py.typed'})}
+          readme = (root / 'README.md').read_text()
+          for snippet in re.findall(r'```python\n(.*?)```', readme, re.S):
+              ast.parse(snippet)
+          def allowed(names):
+              assert not any(set(Path(n).parts) & {'tests', 'constraints', 'experiments', 'compatibility', '__pycache__'} for n in names)
+          with zipfile.ZipFile(Path('dist') / names[0]) as wheel:
+              allowed(wheel.namelist())
+              modules = {n for n in wheel.namelist() if n.startswith('openeight/') and (n.endswith('.py') or n.endswith(('/frameworks.json', '/py.typed')))}
+              assert modules == sources.keys()
+              for name, data in sources.items():
+                  assert wheel.read(name) == data, name
+              assert wheel.read(f'openeight-{version}.dist-info/licenses/LICENSE') == (root / 'LICENSE').read_bytes()
+              assert wheel.read(f'openeight-{version}.dist-info/licenses/NOTICE') == (root / 'NOTICE').read_bytes()
+              assert wheel.read(f'openeight-{version}.dist-info/METADATA').decode().split('\n\n', 1)[1].rstrip() == readme.rstrip()
+          with tarfile.open(Path('dist') / names[1]) as source:
+              allowed(source.getnames())
+              prefix = f'openeight-{version}/'
+              for name, data in sources.items():
+                  assert source.extractfile(prefix + name).read() == data, name
+              assert source.extractfile(prefix + 'README.md').read().decode() == readme
+              assert source.extractfile(prefix + 'LICENSE').read() == (root / 'LICENSE').read_bytes()
+              assert source.extractfile(prefix + 'NOTICE').read() == (root / 'NOTICE').read_bytes()
+          manifest = ''.join(f'{hashlib.sha256((Path("dist") / n).read_bytes()).hexdigest()}  {n}\n' for n in sorted(names))
+          Path('SHA256SUMS').write_text(manifest)
+          digest = hashlib.sha256(manifest.encode()).hexdigest()
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write(f'manifest={digest}\n')
+          with open(os.environ['GITHUB_STEP_SUMMARY'], 'a') as output:
+              output.write(f'Source: `{os.environ["GITHUB_SHA"]}`\n\n```text\n{manifest}```\n')
+          PY
+      - name: Test a fresh default wheel installation
+        env:
+          SDK_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          python -m venv "$RUNNER_TEMP/default-sdk"
+          "$RUNNER_TEMP/default-sdk/bin/python" -m pip install "dist/openeight-${SDK_VERSION}-py3-none-any.whl"
+          "$RUNNER_TEMP/default-sdk/bin/python" -m pip check
+          "$RUNNER_TEMP/default-sdk/bin/python" -I - <<'PY'
+          import pathlib, sys, openeight
+          assert pathlib.Path(openeight.__file__).resolve().is_relative_to(pathlib.Path(sys.prefix).resolve())
+          assert not any(n.startswith(('langchain', 'langgraph', 'deepagents', 'mcp')) for n in sys.modules)
+          from openeight.langchain import create_agent
+          PY
+      - name: Build and install the source distribution
+        env:
+          SDK_VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          python -m venv "$RUNNER_TEMP/sdist-sdk"
+          "$RUNNER_TEMP/sdist-sdk/bin/python" -m pip install "dist/openeight-${SDK_VERSION}.tar.gz"
+          "$RUNNER_TEMP/sdist-sdk/bin/python" -m pip check
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/sdist-sdk/bin/python" -I -c 'import openeight; from openeight.langchain import create_agent'
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: python-sdk-distributions
+          path: dist/*
+          if-no-files-found: error
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: python-sdk-checksums
+          path: SHA256SUMS
+          if-no-files-found: error
+
+  qualify:
+    needs: build
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13', '3.14']
+    env:
+      LANGGRAPH_STRICT_MSGPACK: 'true'
+      SDK_VERSION: ${{ needs.build.outputs.version }}
+      OPENEIGHT_COOKBOOK_ROOT: ${{ github.workspace }}/cookbook
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09 # v5
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: python-sdk-distributions
+          path: dist
+      - name: Install the final wheel with the qualified integration closure
+        run: |
+          python -m pip install 'pip==26.3'
+          python -m pip install -c sdk/python/constraints/qualified.txt "dist/openeight-${SDK_VERSION}-py3-none-any.whl[dev,deepagents-durable,mcp,checkpoints-postgres]"
+          python -m pip check
+          python -I - <<'PY'
+          import pathlib, sys, openeight
+          assert pathlib.Path(openeight.__file__).resolve().is_relative_to(pathlib.Path(sys.prefix).resolve())
+          PY
+      - name: SDK and Deep Agents compatibility tests
+        run: |
+          python scripts/assert_candidate.py "dist/openeight-${SDK_VERSION}-py3-none-any.whl"
+          python -m ruff check sdk/python/openeight sdk/python/typing_tests
+          python -m mypy --config-file sdk/python/pyproject.toml sdk/python/typing_tests
+          python scripts/check.py
+          cd "$RUNNER_TEMP"
+          python -I -m pytest "$GITHUB_WORKSPACE/sdk/python/tests" -q
+
+  publish:
+    if: ${{ inputs.publish }}
+    needs: [build, qualify]
+    runs-on: ubuntu-24.04
+    environment:
+      name: pypi
+      url: https://pypi.org/project/openeight/
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: python-sdk-distributions
+          path: dist
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: python-sdk-checksums
+          path: checksums
+      - name: Verify the build job's exact artifact hashes
+        env:
+          EXPECTED_MANIFEST: ${{ needs.build.outputs.manifest }}
+          SDK_VERSION: ${{ needs.build.outputs.version }}
+        run: |
+          echo "$EXPECTED_MANIFEST  checksums/SHA256SUMS" | sha256sum --check --strict
+          cd dist
+          test "$(find . -maxdepth 1 -type f | wc -l)" -eq 2
+          test -f "openeight-${SDK_VERSION}-py3-none-any.whl"
+          test -f "openeight-${SDK_VERSION}.tar.gz"
+          sha256sum --check --strict ../checksums/SHA256SUMS
+      - name: Publish to production PyPI with Trusted Publishing
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # release/v1
+        with:
+          packages-dir: dist/
+
+  verify-published:
+    needs: [build, publish]
+    runs-on: ubuntu-24.04
+    env:
+      SDK_VERSION: ${{ needs.build.outputs.version }}
+      EXPECTED_MANIFEST: ${{ needs.build.outputs.manifest }}
+    steps:
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131 # v7
+        with:
+          name: python-sdk-checksums
+          path: checksums
+      - name: Download and verify the production distributions
+        run: |
+          echo "$EXPECTED_MANIFEST  checksums/SHA256SUMS" | sha256sum --check --strict
+          python - <<'PYCODE'
+          import hashlib, json, os, time, urllib.error, urllib.request
+          from pathlib import Path
+          version = os.environ['SDK_VERSION']
+          expected = dict(line.split('  ', 1)[::-1] for line in Path('checksums/SHA256SUMS').read_text().splitlines())
+          for attempt in range(12):
+              try:
+                  with urllib.request.urlopen(f'https://pypi.org/pypi/openeight/{version}/json', timeout=30) as response:
+                      files = {item['filename']: item for item in json.load(response)['urls']}
+                  if expected.keys() <= files.keys():
+                      break
+              except urllib.error.HTTPError as error:
+                  if error.code != 404:
+                      raise
+              time.sleep(10)
+          else:
+              raise RuntimeError('Published distributions did not become available')
+          Path('published').mkdir()
+          for name, digest in expected.items():
+              item = files[name]
+              assert item['digests']['sha256'] == digest, name
+              with urllib.request.urlopen(item['url'], timeout=60) as response:
+                  data = response.read()
+              assert hashlib.sha256(data).hexdigest() == digest, name
+              Path('published', name).write_bytes(data)
+          PYCODE
+      - name: Smoke test the published wheel
+        run: |
+          python -m venv "$RUNNER_TEMP/published-sdk"
+          "$RUNNER_TEMP/published-sdk/bin/python" -m pip install "published/openeight-${SDK_VERSION}-py3-none-any.whl"
+          "$RUNNER_TEMP/published-sdk/bin/python" -m pip check
+          cd "$RUNNER_TEMP"
+          "$RUNNER_TEMP/published-sdk/bin/python" -I -c 'import os, importlib.metadata; assert importlib.metadata.version("openeight") == os.environ["SDK_VERSION"]; from openeight.langchain import create_agent'

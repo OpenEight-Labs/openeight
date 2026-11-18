@@ -1,0 +1,27 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openeight-refund-example"
+version = "0.1.0"
+description = "Simulated refunds governed with OpenEight, LangChain and Deep Agents"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.11,<3.15"
+dependencies = ["openeight[langchain]==0.0.1", "langchain-openai==1.6.7"]
+
+[project.optional-dependencies]
+deepagents = ["openeight[deepagents]==0.0.1"]
+test = ["pytest>=8,<10"]
+
+[tool.setuptools]
+py-modules = ["native_agent", "langchain_agent", "deepagents_agent"]
+
+[tool.setuptools.packages.find]
+include = ["refund_assistant*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

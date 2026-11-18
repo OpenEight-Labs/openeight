@@ -1,0 +1,47 @@
+[patterns.governed-refund]
+path = "patterns/governed-refund"
+domain = "customer-support"
+framework = "langchain"
+summary = "Exercise a scoped refund tool and exact-request authorization."
+entry = ["langchain_agent.py"]
+sample = ["sample.py"]
+install = ".[test]"
+requirements = "requirements-qualified.txt"
+requires_model = true
+integration = "managed"
+
+[patterns.order-lookup]
+path = "patterns/order-lookup"
+domain = "customer-support"
+framework = "custom-sdk"
+summary = "Read order status using explicit SDK catalog, readiness and telemetry calls."
+entry = ["agent.py"]
+sample = ["sample.py"]
+requirements = "requirements.txt"
+requires_model = false
+integration = "sdk"
+test_entry = ["-m", "unittest", "discover", "-s", "tests"]
+
+[agents.customer-support]
+path = "agents/customer-support"
+domain = "customer-support"
+framework = "langchain"
+summary = "Resolve customer cases using order, shipment, refund and remedy tools."
+entry = ["cli.py"]
+sample = ["sample.py"]
+install = ".[dev]"
+requirements = "requirements-qualified.txt"
+requires_model = true
+integration = "managed"
+
+[agents.incident-response]
+path = "agents/incident-response"
+domain = "operations"
+framework = "deepagents"
+summary = "Delegate diagnosis, remediation and reporting for a checkout outage."
+entry = ["cli.py"]
+sample = ["sample.py"]
+install = ".[test,durable]"
+requirements = "requirements-qualified.txt"
+requires_model = false
+integration = "managed"

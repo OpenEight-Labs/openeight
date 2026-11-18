@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openeight-customer-support"
+version = "0.2.0"
+description = "Customer Support with order, shipment and governed remedy tools"
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "LICENSE.sdk-journal", "NOTICE"]
+requires-python = ">=3.11,<3.15"
+dependencies = [
+    "openeight[langchain-durable]==0.0.1",
+    "langchain-openai==1.6.7",
+    "langchain==1.4.3",
+    "langgraph==1.2.14",
+    "langchain-core==1.6.7",
+    "langgraph-prebuilt==1.1.0",
+    "langgraph-checkpoint==4.2.0",
+    "langgraph-checkpoint-sqlite==3.1.1",
+    "aiosqlite==0.22.1",
+]
+
+[project.optional-dependencies]
+dev = ["pytest"]
+
+[project.scripts]
+customer-support = "cli:main"
+reference-agent = "cli:main"
+
+[tool.setuptools]
+py-modules = [
+    "agent",
+    "configuration",
+    "presentation",
+    "retry_policy",
+    "journal_schema",
+    "journal_validation",
+    "money",
+    "fixtures",
+    "cli",
+    "initialization",
+    "local",
+    "refresh",
+    "retailer",
+    "service",
+    "standalone",
+    "storage",
+    "tools",
+]
+packages = []
+
+[tool.pytest.ini_options]
+# Runtime modules and recipe fixtures are importable directly from this directory.
+pythonpath = [".", "tests"]

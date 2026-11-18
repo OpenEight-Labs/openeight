@@ -1,0 +1,27 @@
+{
+  "format_version": 1,
+  "product": "OpenEight",
+  "protocol": "Connect JSON",
+  "operations": [
+    {
+      "method": "POST",
+      "path": "/api/v1/openeight.observe.v1.ObserveService/RegisterTools"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/openeight.observe.v1.ObserveService/GetToolReadiness"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/openeight.observe.v1.ObserveService/WriteTelemetry"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/openeight.govern.v1.GovernService/Decide"
+    },
+    {
+      "method": "POST",
+      "path": "/api/v1/openeight.govern.v1.GovernService/GetApprovalState"
+    }
+  ]
+}
