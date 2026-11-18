@@ -6,6 +6,15 @@ Initial public Python SDK release, licensed under Apache-2.0. Release notes desc
 the public package; hosted-service terms and third-party dependency licenses remain
 separate.
 
+### Dependency security
+
+- Pin `langgraph-checkpoint` 4.3.0, SQLite checkpoints 3.1.2 and Postgres
+  checkpoints 3.1.3 to include namespace-isolation fixes for
+  GHSA-6hmw-9432-67qq and GHSA-47pj-3jcm-6whg.
+- Qualify the updated managed integration dependency tuples. Existing durable
+  state remains bound to its original runtime; changing dependencies does not
+  authorize adopting or migrating pending work.
+
 ### Agent APIs
 
 - Agent-scoped clients for tool registration, readiness, Decisions and telemetry.

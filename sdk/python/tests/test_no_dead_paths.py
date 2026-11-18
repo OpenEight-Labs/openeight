@@ -197,7 +197,7 @@ def test_package_metadata_includes_langchain_by_default():
         "langchain-core==1.6.7",
         "langgraph==1.2.14",
         "langgraph-prebuilt==1.1.0",
-        "langgraph-checkpoint==4.2.0",
+        "langgraph-checkpoint==4.3.0",
         "langgraph-sdk>=0.4.6,<1",
         "urllib3>=2.8.0,<3",
         "packaging>=24",
