@@ -35,12 +35,12 @@ Source = "https://github.com/OpenEight-Labs/openeight"
 Issues = "https://github.com/OpenEight-Labs/openeight/issues"
 
 [project.optional-dependencies]
-langchain-durable = ["langgraph-checkpoint-sqlite==3.1.1", "aiosqlite==0.22.1"]
+langchain-durable = ["langgraph-checkpoint-sqlite==3.1.2", "aiosqlite==0.22.1"]
 mcp = ["mcp==1.30.0"]
 checkpoints-postgres = ["langchain==1.4.3", "langchain-core==1.6.7", "langgraph==1.2.14", "langgraph-prebuilt==1.1.0", "langgraph-checkpoint==4.2.0", "langgraph-checkpoint-postgres==3.1.0", "psycopg[binary,pool]==3.3.8", "psycopg-pool==3.3.3"]
 dev = ["pytest>=8", "pytest-asyncio>=1", "ruff==0.12.12", "mypy==1.18.2", "build>=1,<2", "setuptools>=84.1.0", "wheel"]
 deepagents = ["deepagents==0.7.23", "langchain==1.4.3", "langchain-core==1.6.7", "langgraph==1.2.14", "langgraph-prebuilt==1.1.0", "langgraph-checkpoint==4.2.0", "langgraph-sdk>=0.4.6,<1", "urllib3>=2.8.0,<3", "packaging>=24"]
-deepagents-durable = ["deepagents==0.7.23", "langchain==1.4.3", "langchain-core==1.6.7", "langgraph==1.2.14", "langgraph-prebuilt==1.1.0", "langgraph-checkpoint==4.2.0", "langgraph-checkpoint-sqlite==3.1.1", "aiosqlite==0.22.1", "langgraph-sdk>=0.4.6,<1", "urllib3>=2.8.0,<3", "packaging>=24"]
+deepagents-durable = ["deepagents==0.7.23", "langchain==1.4.3", "langchain-core==1.6.7", "langgraph==1.2.14", "langgraph-prebuilt==1.1.0", "langgraph-checkpoint==4.2.0", "langgraph-checkpoint-sqlite==3.1.2", "aiosqlite==0.22.1", "langgraph-sdk>=0.4.6,<1", "urllib3>=2.8.0,<3", "packaging>=24"]
 # Compatibility extra: LangChain is included in the default installation.
 langchain = []
 
