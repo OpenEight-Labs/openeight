@@ -64,7 +64,7 @@ test("workflow and timestamp bounds apply to prepared Decisions and Runs", () =>
   for (const workflowId of [
     "slug",
     "00000000-0000-0000-0000-000000000000",
-    toolId.replace(/-7/, "-4"),
+    "019a7000-7123-4abc-8def-0123456789ab",
   ])
     assert.throws(
       () => prepareRunIdentity({ workflowId, workflowVersion: "1.0.0" }),
