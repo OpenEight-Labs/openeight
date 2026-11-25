@@ -39,7 +39,7 @@ python cookbook.py run governed-refund -- publish
 python cookbook.py run governed-refund -- run ORD-1041 --amount 10.00
 ```
 
-`lookup_order` is Read; `issue_refund` is Write. Select `amount` and `currency` in its policy. Configure the demonstration policy and boundary tests in [operations](docs/operations.md#configure-new-tools-once). The 180 EUR example waits for human approval; denial and missing governance execute no refund.
+`lookup_order` is Read; `issue_refund` is Write. Select `order_id`, `amount`, and `currency` in its Tool binding so the reviewer can identify the order. Use this intent: “Allow refunds of up to and including 100 USD. Require approval for refunds above 100 USD or in any other currency.” Review the policy and boundary cases in [operations](docs/operations.md#configure-new-tools-once). The 180 EUR example waits for human approval; denial and missing governance execute no refund.
 
 See [common setup](../../guides/setup.md) for interpreter selection, provider
 adapters and protected env files. Set an explicit `AGENT_MODEL=provider:model` and `AGENT_MODEL_API_KEY`.

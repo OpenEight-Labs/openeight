@@ -6,6 +6,17 @@ from authorized publication and acceptance of the published package.
 Use the [SDK/cookbook qualification checklist](docs/sdk-cookbook-qualification.md)
 to record cross-component execution and acceptance evidence.
 
+## Release a cookbook update
+
+Use a new `cookbook-v<version>` tag when distributing updated recipes. Run the
+affected recipe tests against the published SDK version declared by the recipe.
+After review and merge, tag the verified commit on main. Keep existing tags in
+place so earlier walkthroughs remain reproducible.
+
+For recipes distributed through the OpenEight skill, update its exporter after
+the cookbook tag is available. Export into an empty directory and run the
+recipe’s setup and offline checks before merging the skill update.
+
 ## Prepare the source
 
 Follow the [versioning policy](docs/versioning.md) and use a reviewed release branch. Update the selected package version in

@@ -93,7 +93,8 @@ def execute(framework, mode, scenario, command="run", missing=False):
     [
         ("allow", "ORD-1041", "receipt_recorded"),
         ("approved", "ORD-1042", "receipt_recorded"),
-        ("deny", "ORD-1043", "deny"),
+        ("rejected", "ORD-1043", "approval_rejected"),
+        ("deny", "ORD-1041", "deny"),
         ("rejected", "ORD-1042", "approval_rejected"),
         ("expired", "ORD-1042", "approval_expired"),
         ("pending", "ORD-1042", "approval_wait_timed_out"),
@@ -115,6 +116,7 @@ def test_native_attempts(framework, mode, outcome, order_id, state):
         == [
             {"path": "amount", "value": scenario.json_requested_amount},
             {"path": "currency", "value": scenario.order.currency},
+            {"path": "order_id", "value": order_id},
         ]
         for request in client.requests
     )
@@ -303,7 +305,11 @@ def test_partial_refund_governance_and_exact_approval_replay(
         assert result["state"] == state
         assert all(
             request["selected_values"]
-            == [{"path": "amount", "value": 100}, {"path": "currency", "value": "EUR"}]
+            == [
+                {"path": "amount", "value": 100},
+                {"path": "currency", "value": "EUR"},
+                {"path": "order_id", "value": "ORD-1042"},
+            ]
             for request in client.requests
         )
         if outcome == "approved":
