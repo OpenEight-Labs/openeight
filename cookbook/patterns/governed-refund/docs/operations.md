@@ -21,34 +21,23 @@ In the console, open this Agent and review its catalog:
 
 - Classify `lookup_order` as Read. It emits execution telemetry without a Decision.
 - Classify `issue_refund` as Write. Configure a Tool policy selecting the native
-  `amount` and `currency` fields. `amount` is a JSON number in
+  `order_id`, `amount`, and `currency` fields. The approval reviewer uses the order ID to identify the request. `amount` is a JSON number in
   **the order's currency, including decimal fractions**. `currency` is its required three-letter uppercase
   code, copied exactly from `lookup_order`; there is no default or currency
   whitelist in the handler.
-- Set this demonstration intent, optionally using Assist: “Deny nonpositive
-  amounts and currencies other than USD, EUR and JPY. For USD, allow positive
-  `amount` values at most 50 and require approval above 50 through 200. For EUR,
-  allow positive values at most 40 and require approval above 40 through 200.
-  For JPY, allow positive values at most 5000 and require approval above 5000
-  through 20000. Deny amounts above each currency's approval maximum.” Review,
-  test and activate the policy and its exact Tool binding. The application does
-  not install policy.
+- Use this intent for the write tool: “Allow refunds of up to and including 100 USD. Require approval for refunds above 100 USD or in any other currency.”
+  In Govern tools, review the Assist proposal and its generated cases. Accept
+  the proposal to activate it for the tool version when the results match.
 
-A manually authored [Rego policy](../policies/refund.rego) implements these limits
-with default denial. Review it in a draft revision, run the saved policy cases and
-activate its exact Tool binding before relying on it. Order identity and refundable
-balance checks remain application responsibilities.
+For manual authoring, the [example Rego policy](../policies/refund.rego)
+implements the same rule. It denies malformed requests and nonpositive amounts.
+Compare these cases when reviewing the draft:
 
-These are independent demonstration limits per currency, with no exchange-rate
-conversion. Save policy cases for the allowed and approval boundaries, values
-on either side, nonpositive amounts and an unlisted currency. For example:
-
-| Currency | Allow | Require approval | Deny |
-|---|---|---|---|
-| USD | 0.01 and 50 | 50.01 and 200 | 0 and 200.01 |
-| EUR | 0.01 and 40 | 40.01 and 200 | 0 and 200.01 |
-| JPY | 1 and 5000 | 5001 and 20000 | 0 and 20001 |
-| INR | — | — | 25 (not listed in this demonstration policy) |
+| Amount | Currency | Expected Decision |
+|---|---|---|
+| 100 | USD | Allow |
+| 100.01 | USD | Require approval |
+| 25 | EUR | Require approval |
 
 Confirm readiness before invoking. These policy tests use representative inputs;
 the handler separately requires the selected order, original currency and exact
@@ -72,7 +61,7 @@ If this Agent previously published full-order-only tool facts, `amount_minor`,
 or a USD-only currency schema,
 publish the updated schema before running it. Review the new ToolVersion and
 replace the saved currency and amount rules and policy selectors with the
-reviewed `amount`/`currency` configuration. Test and activate its new binding.
+reviewed `amount`, `currency`, and `order_id` selectors. Test and activate its new binding.
 Existing policies and pending approvals retain their original schema and inputs;
 do not reuse them as authorization for the changed contract. Finish or stop
 old invocations before switching the example.
@@ -89,7 +78,7 @@ python langchain_agent.py run ORD-1043
 |---|---|
 | ORD-1041: “Order ORD-1041 arrived damaged. Please refund it.” | Allow `amount: 25`, `currency: "USD"`; `receipt_recorded` and one simulated receipt |
 | ORD-1042: “Order ORD-1042 arrived damaged. Please refund it.” | Approval required for `amount: 180`, `currency: "EUR"`; zero effects while pending; one receipt after approval and exact Decision replay |
-| ORD-1043: “Order ORD-1043 arrived damaged. Please refund it.” | Deny `amount: 50000`, `currency: "JPY"`; `deny` and no receipt |
+| ORD-1043: “Order ORD-1043 arrived damaged. Please refund it.” | Approval required for `amount: 50000`, `currency: "JPY"`; reject it in Approvals to finish with no receipt |
 
 For a partial refund, supply the customer's requested amount in the order's currency (decimal fractions supported):
 
@@ -109,12 +98,14 @@ balance does not authorize another tool call: repeats are rejected, and the mode
 cannot change or split the customer's frozen request to fit a policy limit.
 Every new CLI process starts fresh synthetic state, so this is not a way to make
 follow-up refunds against a retained balance. The partial and full examples use
-the same currency-specific policy limits on the **requested** amount. Refundable
+the same approval rule on the **requested** amount. Refundable
 balance and customer-request checks belong to the handler, not policy inputs.
 Keep simulation disclosures out of policy intent; express the business rule.
 
-Keep the 180 EUR process running. Find its pending request under this Agent in the
-console and approve it. The SDK polls for up to **one hour**, configured as
+Keep the 180 EUR process running. In Console Approvals, filter by Agent, open the
+pending refund and check ORD-1042, 180, and EUR together. Copy the Decision ID
+before deciding whether to approve. The CLI prints the receipt when the process
+finishes. Use the Decision ID from the Console to inspect replay. The SDK polls for up to **one hour**, configured as
 `ApprovalConfig(timeout=3600)`, and replays the original Decision before dispatch.
 A rejection, expiry or local timeout executes no refund. The backend approval
 expiry is independent of this local wait. Approval after local waiting stops

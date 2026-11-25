@@ -86,7 +86,11 @@ class ControlService:
                         str(uuid4()),
                         str(uuid4()),
                         "b" * 64,
-                        (FieldSelector("amount"), FieldSelector("currency")),
+                        (
+                            FieldSelector("amount"),
+                            FieldSelector("currency"),
+                            FieldSelector("order_id"),
+                        ),
                     ),
                 )
                 if write
